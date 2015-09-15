@@ -10,12 +10,10 @@ public class Logger
 {
     private string path;
 
-
     public void SetPath(string Path)
     {
         path = Path;
     }
-
 
     //Logger的构造函数
     public Logger(string Path)
@@ -23,17 +21,38 @@ public class Logger
         path = Path;
     }
 
-
     //写Logger的方法
-    public void Write(object Content)
+    public void Write()
     {
-        string content = (string)Content;
+
         FileStream fs = new FileStream(path, FileMode.Append, FileAccess.Write, FileShare.Write);
-        byte[] bytes = UTF8Encoding.Default.GetBytes(content);
+
+        byte[] bytes = UTF8Encoding.Default.GetBytes(Buffer.data);
         fs.Write(bytes, 0, bytes.Length);
+
         fs.Close();
 
     }
+
+}
+
+
+//Buffer类
+class Buffer
+{
+    public static string data;         //Buffer的数据成员
+
+    //Buffer的构造函数
+    public Buffer()
+    {
+        data = "";
+    }
+
+    public void WriteToBuffer(string Content)
+    {
+        data += Content;
+    }
+
 }
 
 namespace Program01
@@ -48,42 +67,60 @@ namespace Program01
             int sum = 0;
             bool correctInput = true;
 
-            Logger logger = new Logger(@"D:\logger.txt");
-            Thread thread = new Thread(new ParameterizedThreadStart(logger.Write));     
+            Buffer buffer = new Buffer();
+            Logger logger = new Logger(@"D:\log.txt");
+            Thread thread = new Thread(new ThreadStart(logger.Write));
+
 
 
             //主线程提示用户输入两个整数，打印这两个整数的和
             //异步线程打印logger
-            Console.WriteLine("Please input a number:");
+
+
+            Console.WriteLine("Please input first number:");
             try
             {
                 number1 = Convert.ToInt32(Console.ReadLine());
-                Console.WriteLine("Please input another number:");
+                Console.WriteLine("Please input second number:");
                 try
                 {
                     number2 = Convert.ToInt32(Console.ReadLine());
                     sum = number1 + number2;
-                    thread.Start("Do some computing .....");        //输入正确的情况
+                    buffer.WriteToBuffer("Do something computing ......");             //输入正确的情况
+
                 }
                 catch
                 {
+
                     correctInput = false;
-                    thread.Start("Input Error!!");              //输入错误的情况
+                    buffer.WriteToBuffer("Input Error!!");            //输入错误的情况
                 }
 
             }
             catch
             {
                 correctInput = false;
-                thread.Start("Input Error!!");          //输入错误的情况
+                buffer.WriteToBuffer("Input Error!!");            //输入错误的情况
             }
 
             if (correctInput)
             {
                 Console.WriteLine("sum = " + sum);
             }
-           
+
+            thread.Start();
+            thread.Join();
+
+            
+            Console.WriteLine(Buffer.data);
             Console.ReadKey();
+
+
+
+
+
+
+
         }
     }
 }
