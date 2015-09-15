@@ -1,0 +1,6 @@
+D:\test\WriteLogger\Program01\bin\Debug\Program01.exe.config
+D:\test\WriteLogger\Program01\bin\Debug\Program01.exe
+D:\test\WriteLogger\Program01\bin\Debug\Program01.pdb
+D:\test\WriteLogger\Program01\obj\Debug\Program01.csprojResolveAssemblyReference.cache
+D:\test\WriteLogger\Program01\obj\Debug\Program01.exe
+D:\test\WriteLogger\Program01\obj\Debug\Program01.pdb
